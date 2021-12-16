@@ -1,5 +1,4 @@
 import React from 'react';
-import headerLogo from '../assets/hacker-news.svg';
 import { Box } from '@mui/material';
 
 const styles = {
@@ -19,8 +18,8 @@ const styles = {
 
 export const Header = () => {
   return (
-    <Box sx={styles.headerContainer}>
-      <img src={headerLogo} alt='' />
+    <Box sx={styles.headerContainer} className='header-logo'>
+      HACKER NEWS
     </Box>
   );
 };

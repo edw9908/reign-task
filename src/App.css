@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Baskervville&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+.MuiButton-outlinedSecondary {
+  color: #606060 !important;
+  border: 1px solid #d6d6d6 !important;
+}
+
+.header-logo {
+  font-family: 'Baskervville';
+  font-size: 28px;
+  color: #3b3b3b;
+}
+
+.card-text {
+  font-family: 'Roboto';
+}
