@@ -1,29 +1,23 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React from 'react';
 import { News } from './News';
 import { Pagination } from '@mui/material';
 import { CustomButtonGroup } from './CustomButtonGroup';
 import { CustomSelect } from './CustomSelect';
 import { Box } from '@mui/material';
-import axios from 'axios';
 import loadingGif from '../assets/loading.gif';
 
-interface IResponse {
-  created_at: string;
-  author: string;
-  story_title: string;
-  objectID: string;
-}
-
-export const NewsList = () => {
-  let filterValue = localStorage.getItem('filter')
-    ? localStorage.getItem('filter')
-    : '0';
-  console.log(typeof filterValue);
-  const [filter, setFilter] = useState<any>(filterValue);
-  const [page, setPage] = useState(0);
-  const [numberPages, setNumberPages] = useState(0);
-  const [newsList, setNewsList] = useState<IResponse[]>([]);
-  const [loading, setLoading] = useState(false);
+export const NewsList = (props: any) => {
+  const {
+    newsList,
+    loading,
+    filter,
+    page,
+    numberPages,
+    showFavs,
+    setPage,
+    setFilter,
+    setShowFavs,
+  } = props;
 
   const NewsMapped = () => {
     return (
@@ -36,8 +30,19 @@ export const NewsList = () => {
       >
         {newsList.map((news: any) => {
           const { story_title, story_url, author, created_at } = news;
+          let favorites: any = localStorage.getItem('favorites');
+          let parsedFavorites = favorites ? JSON.parse(favorites) : [];
+          let isFavorite = parsedFavorites.find(
+            (fav: any) => fav.story_id === news.story_id
+          );
           if (story_title && story_url && author && created_at) {
-            return <News key={news.objectID} data={news} />;
+            return (
+              <News
+                key={news.story_id}
+                data={news}
+                isFavorite={isFavorite ? true : false}
+              />
+            );
           } else {
             return null;
           }
@@ -53,30 +58,6 @@ export const NewsList = () => {
       </div>
     );
   };
-
-  // useEffect(() => {
-  //   let filterValue = localStorage.getItem('filter')
-  //     ? localStorage.getItem('filter')
-  //     : 0;
-  //   setFilter(filterValue);
-  // }, []);
-
-  useEffect(() => {
-    let url = `https://hn.algolia.com/api/v1/search_by_date?${
-      filter === '0' ? '' : 'query=' + filter + '&'
-    }hitsPerPage=8&page=${page}`;
-    setLoading(true);
-    axios
-      .get(url)
-      .then((response) => {
-        setNewsList(response.data.hits);
-        setNumberPages(response.data.nbPages);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [page, filter]);
 
   return (
     <Box
@@ -95,18 +76,28 @@ export const NewsList = () => {
           marginBottom: '63px',
         }}
       >
-        <CustomButtonGroup />
+        <CustomButtonGroup
+          showFavs={showFavs}
+          setShowFavs={setShowFavs}
+          setPage={setPage}
+        />
       </div>
-      <Box
-        sx={{
-          width: '100%',
-          marginBottom: '38px',
-          display: { xs: 'flex', sm: 'block' },
-          justifyContent: 'center',
-        }}
-      >
-        <CustomSelect filter={filter} setPage={setPage} setFilter={setFilter} />
-      </Box>
+      {!showFavs ? (
+        <Box
+          sx={{
+            width: '100%',
+            marginBottom: '38px',
+            display: { xs: 'flex', sm: 'block' },
+            justifyContent: 'center',
+          }}
+        >
+          <CustomSelect
+            filter={filter}
+            setPage={setPage}
+            setFilter={setFilter}
+          />
+        </Box>
+      ) : null}
       {loading ? <Loading /> : <NewsMapped />}
       <div
         style={{

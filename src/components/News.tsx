@@ -1,9 +1,31 @@
+import React, { useState } from 'react';
 import { red, grey } from '@mui/material/colors';
-import { FavoriteBorderRounded, AccessTimeRounded } from '@mui/icons-material';
+import {
+  FavoriteBorderRounded,
+  FavoriteRounded,
+  AccessTimeRounded,
+} from '@mui/icons-material';
 import { Box } from '@mui/material';
 import moment from 'moment';
 
 export const News = (props: any) => {
+  const [isFavorite, setIsFavorite] = useState(props.isFavorite);
+
+  const handleFavorite = () => {
+    let favorites: any = localStorage.getItem('favorites');
+    let parsedFavorites = favorites ? JSON.parse(favorites) : [];
+    if (!isFavorite) {
+      parsedFavorites.push(props.data);
+      localStorage.setItem('favorites', JSON.stringify(parsedFavorites));
+    } else {
+      let result = parsedFavorites.filter(
+        (fav: any) => fav.story_id !== props.data.story_id
+      );
+      localStorage.setItem('favorites', JSON.stringify(result));
+    }
+    setIsFavorite((prev: boolean) => !prev);
+  };
+
   return (
     <Box
       sx={{
@@ -56,11 +78,19 @@ export const News = (props: any) => {
           borderBottomRightRadius: '6px',
         }}
       >
-        <FavoriteBorderRounded
-          color='primary'
-          fontSize='large'
-          sx={{ color: red[500] }}
-        />
+        {isFavorite ? (
+          <FavoriteRounded
+            fontSize='large'
+            sx={{ color: red[500] }}
+            onClick={handleFavorite}
+          />
+        ) : (
+          <FavoriteBorderRounded
+            fontSize='large'
+            sx={{ color: red[500] }}
+            onClick={handleFavorite}
+          />
+        )}
       </div>
     </Box>
   );

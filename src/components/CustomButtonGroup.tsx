@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import { ButtonGroup, Button } from '@mui/material';
 
-export const CustomButtonGroup = () => {
-  const [selectedButton, setSelectedButton] = useState(1);
+export const CustomButtonGroup = (props: any) => {
+  const { showFavs, setShowFavs, setPage } = props;
   return (
     <ButtonGroup variant='outlined'>
       <Button
-        color={selectedButton === 1 ? 'primary' : 'secondary'}
-        onClick={() => setSelectedButton(1)}
+        color={!showFavs ? 'primary' : 'secondary'}
+        onClick={() => {
+          setPage(0);
+          setShowFavs(false);
+        }}
         style={{ width: '100px' }}
       >
         All
       </Button>
       <Button
-        color={selectedButton === 2 ? 'primary' : 'secondary'}
-        onClick={() => setSelectedButton(2)}
+        color={showFavs ? 'primary' : 'secondary'}
+        onClick={() => {
+          setPage(0);
+          setShowFavs(true);
+        }}
         style={{ width: '100px' }}
       >
         My faves
