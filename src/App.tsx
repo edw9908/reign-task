@@ -8,7 +8,7 @@ interface IResponse {
   created_at: string;
   author: string;
   story_title: string;
-  story_id: number;
+  objectID: string;
 }
 
 function App() {

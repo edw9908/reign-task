@@ -33,12 +33,12 @@ export const NewsList = (props: any) => {
           let favorites: any = localStorage.getItem('favorites');
           let parsedFavorites = favorites ? JSON.parse(favorites) : [];
           let isFavorite = parsedFavorites.find(
-            (fav: any) => fav.story_id === news.story_id
+            (fav: any) => fav.objectID === news.objectID
           );
           if (story_title && story_url && author && created_at) {
             return (
               <News
-                key={news.story_id}
+                key={news.objectID}
                 data={news}
                 isFavorite={isFavorite ? true : false}
               />

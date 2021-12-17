@@ -19,7 +19,7 @@ export const News = (props: any) => {
       localStorage.setItem('favorites', JSON.stringify(parsedFavorites));
     } else {
       let result = parsedFavorites.filter(
-        (fav: any) => fav.story_id !== props.data.story_id
+        (fav: any) => fav.objectID !== props.data.objectID
       );
       localStorage.setItem('favorites', JSON.stringify(result));
     }
@@ -51,6 +51,7 @@ export const News = (props: any) => {
           flexDirection: 'column',
           padding: '14px 16px 14px 26px',
         }}
+        onClick={() => window.open(props.data.story_url, '_blank')}
       >
         <div
           style={{
